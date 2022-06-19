@@ -1,0 +1,9 @@
+export type Balance = {
+  balance0: number;
+  balance1: number;
+  balance2: number;
+  rblBalance: number;
+  usdtValue0: number;
+  usdtValue1: number;
+  totalUsdtValue: number;
+}
