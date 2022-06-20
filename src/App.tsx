@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { connectMetamask, getBalances, initialize, installMetaMask, deposit, withdraw, checkConnection } from './controllers/ui-helpers';
+import { BigNumber } from 'ethers';
 import './App.css';
 import Welcome from './components/Welcome';
 import Home from './components/Home';
-import { connectMetamask, getBalances, initialize, installMetaMask } from './controllers/ui-helpers';
 
 function App() {
   const [metaMaskInstalled, setMetaMaskInstalled] = useState(false);
@@ -11,7 +12,7 @@ function App() {
   const onGetStarted = useCallback(async () => {
     if (metaMaskInstalled) {
       const address = await connectMetamask();
-      setAddress('0x8e6F7613C259d10a2e88D874D76F6d8DD647c351');
+      setAddress(address);
     } else {
       installMetaMask();
     }
@@ -21,22 +22,45 @@ function App() {
     return getBalances(address)
   }, []);
 
-  const deposit = useCallback((amount: number) => {
+  const onDeposit = useCallback((amount: number) => {
     console.log(`Depositing ${amount}`);
+    deposit(amount);
   }, [])
 
-  const withdraw = useCallback((amount: number) => {
+  const onWithdraw = useCallback((amount: BigNumber) => {
     console.log(`Withdrawing ${amount}`)
+    withdraw(amount);
   }, [])
 
   useEffect(() => {
     const isMetaMaskInstalled = initialize();
     setMetaMaskInstalled(isMetaMaskInstalled);
+
+    if (isMetaMaskInstalled) {
+      const ethereum = (window as any).ethereum;
+      ethereum.on('accountsChanged', (accounts: string[]) => {
+        // Time to reload your interface with accounts[0]!
+        setAddress(accounts[0]);
+      })
+    }
   }, []);
+
+  useEffect(() => {
+    let timer: any;
+    if (userAddress) {
+      timer = setInterval(() => {
+        checkConnection().then(setAddress)
+      }, 1000);
+    }
+
+    return () => {
+      timer && clearInterval(timer);
+    }
+  }, [userAddress])
 
   return (
     <div className="App">
-      {userAddress ? <Home address={userAddress} loadBalances={loadBalances} deposit={deposit} withdraw={withdraw} /> : <Welcome onGetStarted={onGetStarted} />}
+      {userAddress ? <Home address={userAddress} loadBalances={loadBalances} deposit={onDeposit} withdraw={onWithdraw} /> : <Welcome onGetStarted={onGetStarted} />}
     </div>
   );
 }
