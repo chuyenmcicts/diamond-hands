@@ -16,3 +16,7 @@ ul {
   float: right;
   padding: 10px;
 }
+
+.custom-button {
+  border-radius: 5px;
+}

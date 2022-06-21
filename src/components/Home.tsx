@@ -66,8 +66,8 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
               </div>
             </div>
             <div className="group-container">
-              <button type="button" className="button-content" onClick={handleDeposit}>Add</button>
-              <button type="button" className="button-content" onClick={handleWithdraw}>Remove</button>
+              <button type="button" className="button-content custom-button" onClick={handleDeposit}>Add</button>
+              <button type="button" className="button-content custom-button" onClick={handleWithdraw}>Remove</button>
             </div>
           </div>
           <div className="text-token">Underlying Tokens</div>
