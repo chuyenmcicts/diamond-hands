@@ -59,6 +59,7 @@ export const getBalances = async (address: string): Promise<Balance> => {
     usdtValue0,
     usdtValue1,
     totalUsdtValue,
+    wbtcPrice: wbtcPrice.toNumber(),
   }
 
   console.log(result, balances);

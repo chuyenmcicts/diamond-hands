@@ -9,4 +9,5 @@ export type Balance = {
   usdtValue0: number;
   usdtValue1: number;
   totalUsdtValue: number;
+  wbtcPrice: number;
 }
