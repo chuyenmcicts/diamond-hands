@@ -35,7 +35,7 @@
 }
 
 .btn-grad {
-  background-image: linear-gradient(to right,  #2706e1 0%, #5886ea  51%, #e5eff1  100%);
+  background-image: linear-gradient(to right,  #2706e1 0%, #5886ea  50%, #e5eff1  100%);
   margin: 10px;
   padding: 15px 45px;
   text-align: center;
@@ -44,6 +44,7 @@
   color: white;            
   box-shadow: 0 0 20px #eee;
   border-radius: 30px;
+  border-width: 0;
 }
 
 .text-portfolio {
@@ -62,9 +63,43 @@
 
 .text-token {
   margin-left: 15px;
+  margin-bottom: 15px;
 }
 
-table {
+@media only screen and (max-width: 414px) {
+  .text-token {
+    border-bottom: 1px #000 solid;
+  }
+
+  .table-pc {
+    display: none;
+  }
+
+  .table-mobile {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+  }  
+}
+
+@media only screen and (min-width: 415px) {
+  .table-mobile {
+    display: none;
+  }
+
+  .flex-container {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .group-asset {
+    display: flex;
+    justify-content: space-around;
+    width: 65%;
+  }
+}
+
+.table-pc {
   border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
@@ -79,12 +114,94 @@ th {
   border-bottom: 1px #000 solid;
 }
 
-.flex-container {
-  display: flex;
-}
-
 .flex-container > div {
   margin: 10px;
   padding: 20px;
   font-size: 30px;
+}
+
+
+@media only screen and (max-width: 414px) {
+  .flex-container {
+    display: block;
+  }
+  .text-hear-balance {
+    display: none;
+  }
+
+  .flex-container {
+    display: block;
+  }
+
+  .group-asset {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .group-container {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.text-header {
+  font-size: 16px;
+  width: 50%;
+}
+.text-hear-balance {
+  font-size: 16px;
+}
+
+.number-asset-value {
+  font-size: 50px;
+}
+.text-equal {
+  font-size: 35px;
+  padding-top: 15px;
+}
+
+.button-content {
+  margin-top: 15px;
+  margin-right: 20px;
+  font-size: 25px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+}
+.progress-bar-indicator {
+  height: 100%;
+  background-image: linear-gradient(to right, yellow, orange, #da8f05);
+  border-radius: 25px;
+}
+
+.progress-bar-indicator-ethereum {
+  height: 100%;
+  background-image: linear-gradient(to right, #6f02b3, #af44f2, #d8b1f0);
+  border-radius: 25px;
+}
+
+.progress-bar-indicator-usd-coin {
+  height: 100%;
+  background-image: linear-gradient(to right, #a7b4f2, #6179ed, #2546e6);
+  border-radius: 25px;
+}
+
+#indicator-2 {
+  width: 50%;
+}
+
+#indicator-3 {
+  width: 60%;
+}
+
+.container-header {
+  display: flex;
+  padding-left: 15px;
+  margin-top: 15px;
+}
+
+.custom-button {
+  border-radius: 5px;
 }
