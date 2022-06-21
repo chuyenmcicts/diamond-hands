@@ -17,7 +17,7 @@ function App() {
     } else {
       installMetaMask();
     }
-  }, [metaMaskInstalled]);
+  }, [metaMaskInstalled, setAddress]);
 
   const loadBalances = useCallback((address: string) => {
     return getBalances(address)

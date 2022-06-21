@@ -54,7 +54,7 @@ export const getBalances = async (address: string): Promise<Balance> => {
     balance0: balance0.toNumber(),
     balance1: balance1.toNumber(),
     balance2: balance2,
-    rblBalance: (balances.rblBalance as BigNumber).div(e18).toNumber(),
+    rblBalance: Number(ethers.utils.formatUnits(balances.rblBalance.toString(), 18)),
     rblRawBalance: balances.rblBalance,
     usdtValue0,
     usdtValue1,
