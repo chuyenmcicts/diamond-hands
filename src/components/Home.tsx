@@ -98,7 +98,7 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
                 <td><img src={iconEthereum} alt="" height='20' width='20' /> Ethereum</td>
                 <td>{balance.balance0} ETH</td>
                 <td>${balance.usdtValue0}</td>
-                <td>${balance.wbtcPrice}</td>
+                <td>${balance.ethPrice}</td>
                 <td>{ethereumAlloccation}%</td>
               </tr>
               <tr>
