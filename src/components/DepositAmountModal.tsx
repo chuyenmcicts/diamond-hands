@@ -1,10 +1,11 @@
-import React, { ChangeEvent, useCallback, useState } from 'react'
+import React, { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
 
 interface IProps {
   onDeposit: (amount: number) => void;
+  toggleModal: () => void;
 }
 
-const Component = ({onDeposit}: IProps) => {
+const Component = ({ onDeposit, toggleModal }: IProps) => {
   const [amount, setAmount] = useState('');
 
   const onTextChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -15,9 +16,18 @@ const Component = ({onDeposit}: IProps) => {
   }, [amount, onDeposit])
 
   return (
-    <div>
-      <input type="text" value={amount} onChange={onTextChange} />
-      <button type="button" className="btn btn-primary" onClick={onSubmit} >Submit</button>
+    <div className='modal display-block' onClick={(e: MouseEvent<HTMLDivElement>) => {
+      if( (e.target as HTMLDivElement ).classList.contains('modal')) {
+        toggleModal()
+      }
+    }}>
+      <div className='modal-main'>
+        <div className="modal-header">Deposit</div>
+        <div className='form-group'>
+          <input type="text" autoFocus className="input-group" placeholder="Deposit" value={amount} onChange={onTextChange} />
+          <button type="button" className="custom-button btn-modal" onClick={onSubmit} >Submit</button>
+        </div>
+      </div>
     </div>
   )
 }
