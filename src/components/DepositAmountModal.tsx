@@ -1,14 +1,11 @@
-import React, { ChangeEvent, useCallback, useState } from 'react'
+import React, { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
 
 interface IProps {
   onDeposit: (amount: number) => void;
-  show: boolean;
-  handleClose: () => void;
+  toggleModal: () => void;
 }
 
-const Component = ({ onDeposit, show, handleClose }: IProps) => {
-  const showHideClassName = show ? "modal display-block" : "modal display-none";
-
+const Component = ({ onDeposit, toggleModal }: IProps) => {
   const [amount, setAmount] = useState('');
 
   const onTextChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -19,16 +16,16 @@ const Component = ({ onDeposit, show, handleClose }: IProps) => {
   }, [amount, onDeposit])
 
   return (
-    <div className={showHideClassName}>
+    <div className='modal display-block' onClick={(e: MouseEvent<HTMLDivElement>) => {
+      if( (e.target as HTMLDivElement ).classList.contains('modal')) {
+        toggleModal()
+      }
+    }}>
       <div className='modal-main'>
+        <div className="modal-header">Deposit</div>
         <div className='form-group'>
-          <input type="text" autoFocus className='input-group' value={amount} onChange={onTextChange} />
-          <button type="button" className="btn btn-primary btn-modal" onClick={onSubmit} >Submit</button>
-        </div>
-        <div className='container-button-close'>
-          <button type="button" className='button-content custom-button' onClick={handleClose}>
-            Close
-          </button>
+          <input type="text" autoFocus className="input-group" placeholder="Deposit" value={amount} onChange={onTextChange} />
+          <button type="button" className="custom-button btn-modal" onClick={onSubmit} >Submit</button>
         </div>
       </div>
     </div>

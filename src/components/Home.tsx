@@ -29,9 +29,14 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
 
   const usdCoinAlloccation = (balance.balance2 / (balance.totalUsdtValue || 1)) * 100;
 
-  const handleDeposit = useCallback(() => {
-    setShowDeposit(show => !show)
+  const onToggleDeposit = useCallback(() => {
+    setShowDeposit(show =>!show);
   }, [])
+
+  const handleDeposit = useCallback((amount: number) => {
+    setShowDeposit(false);
+    deposit(amount);
+  }, [deposit]);
 
   const handleWithdraw = useCallback(() => {
     withdraw(balance.rblRawBalance)
@@ -68,9 +73,9 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
               </div>
             </div>
             <div className="group-container">
-              <button type="button" className="button-content custom-button" onClick={handleDeposit}>Add</button>
+              <button type="button" className="button-content custom-button" onClick={onToggleDeposit}>Add</button>
               <button type="button" className="button-content custom-button" onClick={handleWithdraw}>Remove</button>
-              {showDeposit && <DepositModal onDeposit={deposit} show={showDeposit} handleClose={handleDeposit} />}
+              {showDeposit && <DepositModal onDeposit={handleDeposit} toggleModal={onToggleDeposit} />}
             </div>
           </div>
           <div className="text-token">Underlying Tokens</div>
@@ -117,7 +122,6 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
                 unit='USDC'
               />
             </table>
-
 
             <table className="table-mobile">
               <RowDataMobile

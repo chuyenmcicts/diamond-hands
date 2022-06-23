@@ -112,6 +112,7 @@
   .btn-modal {
     padding-left: 10px;
     margin-left: 20px;
+    font-size: 25px;
   }
 
   .number-asset-value {
@@ -121,6 +122,16 @@
   .text-equal {
     font-size: 35px;
     padding-top: 15px;
+  }
+
+  .input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    font-size: 20px;
+    padding-left: 10px;
   }
 }
 
@@ -181,8 +192,13 @@ th {
   }
 
   .input-group {
-    margin: 0 10px 0 10px;
-    width: 90%;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    font-size: 20px;
+    padding-left: 10px;
   }
 }
 
@@ -250,12 +266,12 @@ th {
 }
 
 .modal-main {
-  position:fixed;
+  position: fixed;
   background: white;
-  width: 80%;
-  height: 50%;
-  top:50%;
-  left:50%;
+  width: 50%;
+  height: 40%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%,-50%);
 }
 
@@ -269,4 +285,8 @@ th {
 
 .container-button-close {
   text-align: center;
+}
+
+.modal-header {
+  margin-left: 10px;
 }
