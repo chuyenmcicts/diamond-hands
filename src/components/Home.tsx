@@ -4,6 +4,8 @@ import { Balance } from '../types';
 
 import DepositModal from './DepositAmountModal';
 import Navbar from './Navbar/Navbar';
+import RowData from './RowData'
+import RowDataMobile from './RowDataMobile'
 
 import iconBitcoin from '../../src/icon/bitcoin.png'
 import iconEthereum from '../../src/icon/ethereum.png'
@@ -56,18 +58,19 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
           <div className="flex-container">
             <div className="group-asset">
               <div>
-                <p className="number-asset-value">${balance.totalUsdtValue}</p>
+                <p className="number-asset-value">${balance.totalUsdtValue.toFixed(2)}</p>
               </div>
               <div>
                 <p className="text-equal">=</p>
               </div>
               <div>
-                <p className="number-asset-value">{balance.rblBalance}</p>
+                <p className="number-asset-value">{balance.rblBalance.toFixed(6)}</p>
               </div>
             </div>
             <div className="group-container">
               <button type="button" className="button-content custom-button" onClick={handleDeposit}>Add</button>
               <button type="button" className="button-content custom-button" onClick={handleWithdraw}>Remove</button>
+              {showDeposit && <DepositModal onDeposit={deposit} show={showDeposit} handleClose={handleDeposit} />}
             </div>
           </div>
           <div className="text-token">Underlying Tokens</div>
@@ -80,97 +83,72 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
                 <th>Token Price</th>
                 <th>Allocation</th>
               </tr>
-              <tr>
-                <td><img src={iconBitcoin} alt="" height='20' width='20' /> Bitcoin</td>
-                <td>{balance.balance1} BTC</td>
-                <td>${balance.usdtValue1}</td>
-                <td>${balance.wbtcPrice}</td>
-                <td>{bitcoinAlloccation}%</td>
-              </tr>
-              <tr>
-                <td colSpan={5}>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar-indicator" style={{ width: `${bitcoinAlloccation}%` }}></div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><img src={iconEthereum} alt="" height='20' width='20' /> Ethereum</td>
-                <td>{balance.balance0} ETH</td>
-                <td>${balance.usdtValue0}</td>
-                <td>${balance.ethPrice}</td>
-                <td>{ethereumAlloccation}%</td>
-              </tr>
-              <tr>
-                <td colSpan={5}>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar-indicator-ethereum" style={{ width: `${ethereumAlloccation}%` }}></div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><img src={usdCoin} alt="" height='20' width='20' /> USD Coin</td>
-                <td>{balance.balance2} USDC</td>
-                <td>${balance.balance2}</td>
-                <td>$1.00</td>
-                <td>{usdCoinAlloccation}%</td>
-              </tr>
-              <tr>
-                <td colSpan={5}>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar-indicator-usd-coin" style={{ width: `${usdCoinAlloccation}%` }}></div>
-                  </div>
-                </td>
-              </tr>
+
+              <RowData
+                image={iconBitcoin}
+                balance={balance.balance1.toFixed(8)}
+                value={balance.usdtValue1.toFixed(2)}
+                price={balance.wbtcPrice.toFixed(2)}
+                percent={bitcoinAlloccation}
+                name='Bitcoin'
+                unit='BTC'
+                className='progress-bar-indicator'
+              />
+
+              <RowData
+                image={iconEthereum}
+                balance={balance.balance0.toFixed(6)}
+                value={balance.usdtValue0.toFixed(2)}
+                price={balance.ethPrice.toFixed(2)}
+                percent={ethereumAlloccation}
+                className='progress-bar-indicator-ethereum'
+                name='Ethereum'
+                unit='ETH'
+              />
+
+              <RowData
+                image={usdCoin}
+                balance={balance.balance2.toFixed(6)}
+                value={balance.balance2.toFixed(2)}
+                price={'1.00'}
+                percent={usdCoinAlloccation}
+                className='progress-bar-indicator-usd-coin'
+                name='USD Coin'
+                unit='USDC'
+              />
             </table>
+
+
             <table className="table-mobile">
-              <tr>
-                <td><img src={iconBitcoin} alt="" height='20' width='20' /> Bitcoin</td>
-                <td>{bitcoinAlloccation}%</td>
-              </tr>
-              <tr>
-                <td>{balance.balance1} BTC</td>
-                <td>${balance.usdtValue1}</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar-indicator" style={{ width: `${bitcoinAlloccation}%` }}></div>
-                  </div>
-                </td>
-              </tr>
+              <RowDataMobile
+                image={iconBitcoin}
+                percent={bitcoinAlloccation}
+                balance={balance.balance1}
+                value={balance.usdtValue1}
+                className='progress-bar-indicator'
+                name='Bitcoin'
+                unit='BTC'
+              />
 
-              <tr>
-                <td><img src={iconEthereum} alt="" height='20' width='20' /> Ethereum</td>
-                <td>{ethereumAlloccation}%</td>
-              </tr>
-              <tr>
-                <td>{balance.balance1} ETH</td>
-                <td>${balance.usdtValue0}</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar-indicator-ethereum" style={{ width: `${ethereumAlloccation}%` }}></div>
-                  </div>
-                </td>
-              </tr>
+              <RowDataMobile
+                image={iconEthereum}
+                percent={ethereumAlloccation}
+                balance={balance.balance1}
+                value={balance.usdtValue0}
+                className='progress-bar-indicator-ethereum'
+                name='Ethereum'
+                unit='ETH'
+              />
 
-              <tr>
-                <td><img src={usdCoin} alt="" height='20' width='20' /> USD Coin</td>
-                <td>{usdCoinAlloccation}%</td>
-              </tr>
-              <tr>
-                <td>{balance.balance2} USDC</td>
-                <td>${balance.balance2}</td>
-              </tr>
-              <tr>
-                <td colSpan={2}>
-                  <div className="progress-bar-container">
-                    <div className="progress-bar-indicator-usd-coin" style={{ width: `${usdCoinAlloccation}%` }}></div>
-                  </div>
-                </td>
-              </tr>
+              <RowDataMobile
+                image={usdCoin}
+                percent={usdCoinAlloccation}
+                balance={balance.balance2}
+                value={balance.balance2}
+                className='progress-bar-indicator-usd-coin'
+                name='USD Coin'
+                unit='USDC'
+              />
             </table>
           </div>
         </div>

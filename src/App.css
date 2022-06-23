@@ -79,7 +79,12 @@
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
-  }  
+  }
+
+  .btn-modal {
+    padding-left: 10px;
+    margin-left: 100px;
+  }
 }
 
 @media only screen and (min-width: 415px) {
@@ -97,6 +102,26 @@
     justify-content: space-around;
     width: 65%;
   }
+
+  .form-group {
+    display: flex;
+    justify-content: center;
+    padding: 60px;
+  }
+
+  .btn-modal {
+    padding-left: 10px;
+    margin-left: 20px;
+  }
+
+  .number-asset-value {
+    font-size: 50px;
+  }
+
+  .text-equal {
+    font-size: 35px;
+    padding-top: 15px;
+  }
 }
 
 .table-pc {
@@ -107,7 +132,7 @@
 
 td {
   text-align: left;
-  padding: 8px;
+  padding: 8px 8px 8px 0px;
 }
 
 th {
@@ -142,22 +167,31 @@ th {
     display: flex;
     justify-content: center;
   }
+
+  .form-group {
+    padding-top: 20px;
+  }
+
+  .number-asset-value {
+    font-size: 30px;
+  }
+
+  .text-equal {
+    font-size: 30px;
+  }
+
+  .input-group {
+    margin: 0 10px 0 10px;
+    width: 90%;
+  }
 }
 
 .text-header {
   font-size: 16px;
-  width: 50%;
+  width: 40%;
 }
 .text-hear-balance {
   font-size: 16px;
-}
-
-.number-asset-value {
-  font-size: 50px;
-}
-.text-equal {
-  font-size: 35px;
-  padding-top: 15px;
 }
 
 .button-content {
@@ -204,4 +238,35 @@ th {
 
 .custom-button {
   border-radius: 5px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-main {
+  position:fixed;
+  background: white;
+  width: 80%;
+  height: 50%;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
+}
+
+.container-button-close {
+  text-align: center;
 }
