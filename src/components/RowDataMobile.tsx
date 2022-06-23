@@ -1,7 +1,7 @@
 interface IProps {
   image: string;
-  balance: number;
-  value: number;
+  balance: string;
+  value: string;
   percent: number;
   className: string;
   name: string;

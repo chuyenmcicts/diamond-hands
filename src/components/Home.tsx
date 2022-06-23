@@ -123,8 +123,8 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
               <RowDataMobile
                 image={iconBitcoin}
                 percent={bitcoinAlloccation}
-                balance={balance.balance1}
-                value={balance.usdtValue1}
+                balance={balance.balance1.toFixed(8)}
+                value={balance.usdtValue1.toFixed(2)}
                 className='progress-bar-indicator'
                 name='Bitcoin'
                 unit='BTC'
@@ -133,8 +133,8 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
               <RowDataMobile
                 image={iconEthereum}
                 percent={ethereumAlloccation}
-                balance={balance.balance1}
-                value={balance.usdtValue0}
+                balance={balance.balance1.toFixed(6)}
+                value={balance.usdtValue0.toFixed(2)}
                 className='progress-bar-indicator-ethereum'
                 name='Ethereum'
                 unit='ETH'
@@ -143,8 +143,8 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
               <RowDataMobile
                 image={usdCoin}
                 percent={usdCoinAlloccation}
-                balance={balance.balance2}
-                value={balance.balance2}
+                balance={balance.balance2.toFixed(6)}
+                value={balance.balance2.toFixed(2)}
                 className='progress-bar-indicator-usd-coin'
                 name='USD Coin'
                 unit='USDC'
