@@ -12,3 +12,9 @@ export type Balance = {
   ethPrice: number;
   wbtcPrice: number;
 }
+
+export type ChainInfo = {
+  chainId: number;
+  name: string;
+  valid: boolean;
+}

@@ -5,9 +5,12 @@ import './App.css';
 import Welcome from './components/Welcome';
 import Home from './components/Home';
 import { useMetaMaskAccount } from './hooks/useMetamaskAccount';
+import { useMetamaskNetwork } from './hooks/useMetamaskNetwork';
+import { supportedChainId } from './controllers/configs';
 
 function App() {
   const [metaMaskInstalled, setMetaMaskInstalled] = useState(false);
+  const chainInfo = useMetamaskNetwork(supportedChainId);
   const { userAddress, setAddress } = useMetaMaskAccount();
 
   const onGetStarted = useCallback(async () => {
@@ -43,6 +46,8 @@ function App() {
       {userAddress ? (
         <Home
           address={userAddress}
+          chainInfo={chainInfo}
+          supportedChainId={supportedChainId}
           loadBalances={loadBalances}
           deposit={onDeposit}
           withdraw={onWithdraw}
