@@ -85,13 +85,15 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
               <div className="text-token">Underlying Tokens</div>
               <div className="container-table">
                 <table className="table-pc">
-                  <tr>
-                    <th>Token</th>
-                    <th>Quantity</th>
-                    <th>Value</th>
-                    <th>Token Price</th>
-                    <th>Allocation</th>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <th>Token</th>
+                      <th>Quantity</th>
+                      <th>Value</th>
+                      <th>Token Price</th>
+                      <th>Allocation</th>
+                    </tr>
+                  </tbody>
 
                   <RowData
                     image={iconBitcoin}
