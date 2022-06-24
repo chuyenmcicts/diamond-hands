@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, MouseEvent, useCallback, useState } from 'react'
 
 interface IProps {
   onDeposit: (amount: number) => void;
