@@ -76,7 +76,7 @@ export const deposit = async (amount: number) => {
   
   const depositFixedAmount = 1000;
   const data = iface.encodeFunctionData('deposit', [depositFixedAmount])
-  const value = ethers.utils.parseUnits(amount.toString(), 18).toString();
+  const value = ethers.utils.parseEther(amount.toString()).toHexString();
 
   const transactionParameters = {
     to: contractAddress, // Required except during contract publications.
