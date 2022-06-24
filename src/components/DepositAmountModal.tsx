@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, MouseEvent, useCallback, useState } from 'react'
 
 interface IProps {
   onDeposit: (amount: number) => void;
@@ -22,10 +22,10 @@ const Component = ({ onDeposit, toggleModal }: IProps) => {
       }
     }}>
       <div className='modal-main'>
-        <div className="modal-header">Deposit</div>
+        <div className="modal-header">Add RBL (Deposit ETH)</div>
         <div className='form-group'>
-          <input type="text" autoFocus className="input-group" placeholder="Deposit" value={amount} onChange={onTextChange} />
-          <button type="button" className="custom-button btn-modal" onClick={onSubmit} >Submit</button>
+          <input type="text" autoFocus className="input-group" placeholder="ETH" value={amount} onChange={onTextChange} />
+          <button type="button" className="custom-button btn-modal" onClick={onSubmit} >Add</button>
         </div>
       </div>
     </div>
