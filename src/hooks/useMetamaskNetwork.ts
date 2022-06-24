@@ -2,19 +2,16 @@ import { useEffect, useState } from "react";
 import { chainList } from "../controllers/configs";
 import { ChainInfo } from "../types";
 
-const composeChainInfo = (chainId: number, supportedChainId: number) => ({
+const composeChainInfo = (chainId: number, supportedChainId: number) => chainId ? ({
   valid: Number(chainId) === Number(supportedChainId),
   chainId,
   name: chainList[Number(chainId)] || "Unknown",
-});
+}) : undefined;
 
 export const useMetamaskNetwork = (supportedChainId: number) => {
   const ethereum = (window as any).ethereum;
-  const currentChainId = Number(ethereum ? ethereum.chainId : 0);
 
-  const [chainInfo, setChainInfo] = useState<ChainInfo>(
-    composeChainInfo(currentChainId, supportedChainId)
-  );
+  const [chainInfo, setChainInfo] = useState<ChainInfo | undefined>(undefined);
 
   useEffect(() => {
     if (ethereum) {
@@ -29,10 +26,15 @@ export const useMetamaskNetwork = (supportedChainId: number) => {
   useEffect(() => {
     let chainId = Number(ethereum ? ethereum.chainId : 0);
     if (!chainId) {
-      setTimeout(() => {
+      const interval = setInterval(() => {
         chainId = Number(ethereum ? ethereum.chainId : 0);
-        setChainInfo(composeChainInfo(chainId, supportedChainId));
-      }, 500)
+        if (chainId) {
+          setChainInfo(composeChainInfo(chainId, supportedChainId));
+          clearInterval(interval);
+        }
+      }, 100)
+    } else {
+      setChainInfo(composeChainInfo(chainId, supportedChainId));
     }
   }, [ethereum, supportedChainId])
 

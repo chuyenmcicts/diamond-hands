@@ -43,7 +43,7 @@ function App() {
 
   return (
     <div className="App">
-      {userAddress ? (
+      {userAddress ? !chainInfo ? null : (
         <Home
           address={userAddress}
           chainInfo={chainInfo}
