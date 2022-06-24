@@ -16,17 +16,15 @@ export const useMetaMaskAccount = () => {
   }, []);
 
   useEffect(() => {
-    let timer: any;
-    if (userAddress) {
-      timer = setInterval(() => {
-        checkConnection().then(setAddress)
-      }, 1000);
-    }
+    checkConnection().then(setAddress);
+    const timer = setInterval(() => {
+      checkConnection().then(setAddress);
+    }, 1000);
 
     return () => {
       timer && clearInterval(timer);
-    }
-  }, [userAddress])
+    };
+  }, [userAddress]);
 
   return { userAddress, setAddress };
 }
