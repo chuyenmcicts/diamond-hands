@@ -14,7 +14,7 @@ const Component = (props: IProps) => (
       }. Please change it to ${chainList[Number(props.supportedChainId)]}`}</p>
     <button
       type="button"
-      className="custom-button"
+      className="button-content custom-button"
       onClick={props.onRequestChangeNetwork}
     >
       Switch Network
