@@ -11,7 +11,7 @@ export const useMetaMaskAccount = () => {
       const ethereum = (window as any).ethereum;
       ethereum.on("accountsChanged", (accounts: string[]) => {
         setAddress(accounts[0]);
-      })
+      });
     }
   }, []);
 
