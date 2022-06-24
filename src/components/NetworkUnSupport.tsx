@@ -9,13 +9,12 @@ interface IProps {
 }
 
 const Component = (props: IProps) => (
-  <div>
-    <p>{`Not supported network ${
-      chainList[Number(props.chainInfo.chainId)] || "Unknown"
-    }. Please change it to ${chainList[Number(props.supportedChainId)]}`}</p>
+  <div className="group-text-connect">
+    <p className="header-content-support">{`Not supported network ${chainList[Number(props.chainInfo.chainId)] || "Unknown"
+      }. Please change it to ${chainList[Number(props.supportedChainId)]}`}</p>
     <button
       type="button"
-      className="custom-button"
+      className="button-content custom-button"
       onClick={props.onRequestChangeNetwork}
     >
       Switch Network
