@@ -121,7 +121,7 @@
 
   .text-header {
     font-size: 16px;
-    width: 35%;
+    width: 40%;
   }
 
   .flex-container > div {
@@ -231,6 +231,7 @@ th {
 
   .modal-header {
     padding-left: 16px;
+    font-size: 20px;
   }
 
   .group-rbl {

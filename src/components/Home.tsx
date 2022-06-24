@@ -71,8 +71,9 @@ const Component = ({ address, loadBalances, deposit, withdraw }: IProps) => {
                   <div>
                     <p className="text-equal">=</p>
                   </div>
-                  <div>
+                  <div className="group-rbl">
                     <p className="number-asset-value">{balance.rblBalance.toFixed(6)}</p>
+                    <p className="unit-symbol">RBL</p>
                   </div>
                 </div>
                 <div className="group-container">
