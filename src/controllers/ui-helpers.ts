@@ -1,12 +1,18 @@
 import { ethers } from "ethers";
 import { BigNumber } from "@ethersproject/bignumber";
 import { Balance } from "../types";
-import { abi, contractAddress } from "./configs";
+import { abi } from "./configs";
 
 export const initialize = () => {
   const { ethereum } = window as any;
   return Boolean(ethereum && ethereum.isMetaMask);
 };
+
+export const loadEnv = () => {
+  const contractAddress = process.env.REACT_APP_CONTRACT as string;
+  const supportedChainId = Number(process.env.REACT_APP_CHAIN_ID);
+  return { contractAddress, supportedChainId };
+}
 
 export const connectMetamask = async () => {
   try {
@@ -27,6 +33,7 @@ export const installMetaMask = () => {
 
 export const getBalances = async (address: string): Promise<Balance> => {
   const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+  const { contractAddress } = loadEnv();
   const contract = new ethers.Contract(contractAddress, abi, provider);
   const balances = await contract.getBalances(address);
 
@@ -73,6 +80,7 @@ export const getBalances = async (address: string): Promise<Balance> => {
 export const deposit = async (amount: number) => {
   const iface = new ethers.utils.Interface(abi);
   const ethereum = (window as any).ethereum;
+  const { contractAddress } = loadEnv();
   
   const depositFixedAmount = 1000;
   const data = iface.encodeFunctionData('deposit', [depositFixedAmount])
@@ -97,6 +105,7 @@ export const deposit = async (amount: number) => {
 export const withdraw =async (amount: BigNumber) => {
   const iface = new ethers.utils.Interface(abi);
   const ethereum = (window as any).ethereum;
+  const { contractAddress } = loadEnv();
 
   const data = iface.encodeFunctionData('withdraw', [amount])
   const transactionParameters = {

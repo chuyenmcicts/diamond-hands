@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { connectMetamask, getBalances, initialize, installMetaMask, deposit, withdraw } from './controllers/ui-helpers';
+import { connectMetamask, getBalances, initialize, installMetaMask, deposit, withdraw, loadEnv } from './controllers/ui-helpers';
 import { BigNumber } from 'ethers';
 import './App.css';
 import Welcome from './components/Welcome';
 import Home from './components/Home';
 import { useMetaMaskAccount } from './hooks/useMetamaskAccount';
 import { useMetamaskNetwork } from './hooks/useMetamaskNetwork';
-import { supportedChainId } from './controllers/configs';
 
 function App() {
   const [metaMaskInstalled, setMetaMaskInstalled] = useState(false);
+  const { supportedChainId } = loadEnv();
   const chainInfo = useMetamaskNetwork(supportedChainId);
   const { userAddress, setAddress } = useMetaMaskAccount();
 
