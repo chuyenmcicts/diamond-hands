@@ -1,6 +1,7 @@
 {
   "name": "rebalancer",
   "version": "0.1.0",
+  "homepage": "https://ictsvn.github.io/comps-rebalancer",
   "private": true,
   "dependencies": {
     "@metamask/onboarding": "^1.0.1",
@@ -22,6 +23,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "prdeploy": "react-scripts build",
+    "deploy": "gh-pages -d build -r git@github.com:ictsvn/comps-rebalancer.git",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -43,6 +46,7 @@
     ]
   },
   "devDependencies": {
-    "@types/bn.js": "^5.1.0"
+    "@types/bn.js": "^5.1.0",
+    "gh-pages": "^4.0.0"
   }
 }
