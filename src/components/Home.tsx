@@ -1,8 +1,7 @@
 import { BigNumber } from "ethers";
 import React, { useCallback, useEffect, useState } from "react";
-import { Balance, ChainInfo } from "../types";
+import { ChainInfo, Token, TokenData } from "../types";
 
-import DepositModal from "./DepositAmountModal";
 import Navbar from "./Navbar/Navbar";
 import RowData from "./RowData";
 import RowDataMobile from "./RowDataMobile";
@@ -12,12 +11,13 @@ import Spinner from "./Spinner/Spinner";
 import iconBitcoin from "../../src/icon/bitcoin.png";
 import iconEthereum from "../../src/icon/ethereum.png";
 import usdCoin from "../../src/icon/usd_coin.png";
+import iconDiamond from "../../src/icon/diamond.png";
 
 interface IProps {
   address: string;
   chainInfo: ChainInfo;
   supportedChainId: number;
-  loadBalances: (address: string) => Promise<Balance>;
+  loadBalances: () => Promise<Token>;
   deposit: (amount: number) => void;
   withdraw: (amount: BigNumber) => void;
 }
@@ -30,34 +30,39 @@ const Component = ({
   deposit,
   withdraw,
 }: IProps) => {
-  const [showDeposit, setShowDeposit] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [balance, setBalance] = useState<Balance>({} as Balance);
 
-  const bitcoinAlloccation =
-    (balance.usdtValue1 / (balance.totalUsdtValue || 1)) * 100;
+  const [tokens, setToken] = useState<Token>({} as Token);
 
-  const ethereumAlloccation =
-    (balance.usdtValue0 / (balance.totalUsdtValue || 1)) * 100;
+  const [tokenInTable, setTokenInTable] = useState<TokenData>({} as TokenData);
 
-  const usdCoinAlloccation =
-    (balance.balance2 / (balance.totalUsdtValue || 1)) * 100;
+  let sumAllToken = 0;
+  if (tokens && tokens.length) {
+    tokens.forEach((item) => {
+      sumAllToken += item.ethAsset * item.ethPrice + item.btcAsset * item.btcPrice + item.usdcAsset;
+    })
+  }
 
-  const onToggleDeposit = useCallback(() => {
-    setShowDeposit((show) => !show);
-  }, []);
+  const allowcationOfBitcoin = ((tokenInTable.btcAsset * tokenInTable.btcPrice) / sumAllToken) * 100;
 
-  const handleDeposit = useCallback(
-    (amount: number) => {
-      setShowDeposit(false);
-      deposit(amount);
-    },
-    [deposit]
-  );
+  const allowcationOfEth = ((tokenInTable.ethAsset * tokenInTable.ethPrice) / sumAllToken) * 100;
 
-  const handleWithdraw = useCallback(() => {
-    withdraw(balance.rblRawBalance);
-  }, [withdraw, balance.rblRawBalance]);
+  const allowcationOfUsd = (tokenInTable.usdcAsset / sumAllToken) * 100;
+
+  const getDayWithCount = () => {
+    const a = new Date();
+    const dayCalculation = a.setMonth(a.getMonth() + 12 - tokenInTable.count);
+    const convertFutureDay = new Date(dayCalculation);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const year = convertFutureDay.getFullYear();
+    const month = months[convertFutureDay.getMonth()];
+    const time = month + ' ' + year;
+    return time;
+  }
+
+  const handleDataTable = (token: TokenData) => () => {
+    setTokenInTable(token)
+  };
 
   const onRequestChangeNetwork = useCallback(() => {
     (window as any).ethereum.request({
@@ -72,11 +77,12 @@ const Component = ({
       return;
     }
     setLoading(true);
-    loadBalances(address).then((balance) => {
-      setBalance(balance);
+    loadBalances().then((data) => {
+      setToken(data);
+      setTokenInTable(data[0])
       setLoading(false);
     });
-  }, [address, chainInfo, loadBalances]);
+  }, [chainInfo, loadBalances]);
 
   return !chainInfo.valid ? (
     <NetworkUnSupport
@@ -91,53 +97,41 @@ const Component = ({
         <Spinner />
       ) : (
         <div>
-          <div className="text-portfolio">Your Portfolio</div>
-          <div className="container-portfolio">
-            <div className="container-header">
-              <p className="text-header">Your Total Asset Value</p>
-              <p className="text-hear-balance">Your RBL balance</p>
-            </div>
-            <div className="flex-container">
-              <div className="group-asset">
-                <div>
-                  <p className="number-asset-value">
-                    ${balance.totalUsdtValue.toFixed(2)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-equal">=</p>
-                </div>
-                <div className="group-rbl">
-                  <p className="number-asset-value">
-                    {balance.rblBalance.toFixed(6)}
-                  </p>
-                  <p className="unit-symbol">RBL</p>
-                </div>
+          <div className="container-header">
+            <p className="text-header">Your Asset</p>
+          </div>
+          <div className="flex-container">
+            <div className="group-asset">
+              <div>
+                <p className="number-asset-value">
+                  {tokens.map((token, index) => {
+                    return <img className="image-diamond" onClick={handleDataTable(token)} key={index} src={iconDiamond} alt="" height='50' width='50' />
+                  })}
+                </p>
               </div>
-              <div className="group-container">
-                <button
-                  type="button"
-                  className="button-content custom-button first-button"
-                  onClick={onToggleDeposit}
-                >
-                  Add
-                </button>
-                <button
-                  type="button"
-                  className="button-content custom-button"
-                  onClick={handleWithdraw}
-                >
-                  Remove
-                </button>
-                {showDeposit && (
-                  <DepositModal
-                    onDeposit={handleDeposit}
-                    toggleModal={onToggleDeposit}
-                  />
-                )}
+              <div>
+                <p className="text-equal">=</p>
+              </div>
+              <div>
+                <p className="number-asset-value">
+                  ${sumAllToken.toFixed(2)}
+                </p>
               </div>
             </div>
-            <div className="text-token">Underlying Tokens</div>
+            <div className="group-container">
+              <button
+                type="button"
+                className="button-content custom-button first-button">
+                Buy <img src={iconDiamond} alt="" height='30' width='30' />
+              </button>
+            </div>
+          </div>
+          <div className="container-detail">
+            <ul>
+              <li className="text-token">{tokenInTable.tokenId}</li>
+              <li className="button-claim"><button disabled={tokenInTable.count !== 12} className="custom-button claim">{getDayWithCount()}<br></br>to redeem</button></li>
+            </ul>
+            <div className="split-custom"></div>
             <div className="container-table">
               <table className="table-pc">
                 <tbody>
@@ -152,10 +146,10 @@ const Component = ({
 
                 <RowData
                   image={iconBitcoin}
-                  balance={balance.balance1.toFixed(8)}
-                  value={balance.usdtValue1.toFixed(2)}
-                  price={balance.wbtcPrice.toFixed(2)}
-                  percent={bitcoinAlloccation}
+                  balance={tokenInTable.btcAsset.toFixed(8)}
+                  value={(tokenInTable.btcAsset * tokenInTable.btcPrice).toFixed(2)}
+                  price={tokenInTable.btcPrice.toFixed(2)}
+                  percent={allowcationOfBitcoin.toFixed(2)}
                   name="Bitcoin"
                   unit="BTC"
                   className="progress-bar-indicator"
@@ -163,10 +157,10 @@ const Component = ({
 
                 <RowData
                   image={iconEthereum}
-                  balance={balance.balance0.toFixed(6)}
-                  value={balance.usdtValue0.toFixed(2)}
-                  price={balance.ethPrice.toFixed(2)}
-                  percent={ethereumAlloccation}
+                  balance={tokenInTable.ethAsset.toFixed(6)}
+                  value={(tokenInTable.ethAsset * tokenInTable.ethPrice).toFixed(2)}
+                  price={tokenInTable.ethPrice.toFixed(2)}
+                  percent={allowcationOfEth.toFixed(2)}
                   className="progress-bar-indicator-ethereum"
                   name="Ethereum"
                   unit="ETH"
@@ -174,10 +168,10 @@ const Component = ({
 
                 <RowData
                   image={usdCoin}
-                  balance={balance.balance2.toFixed(6)}
-                  value={balance.balance2.toFixed(2)}
+                  balance={tokenInTable.usdcAsset.toFixed(6)}
+                  value={tokenInTable.usdcAsset.toFixed(2)}
                   price={"1.00"}
-                  percent={usdCoinAlloccation}
+                  percent={allowcationOfUsd.toFixed(2)}
                   className="progress-bar-indicator-usd-coin"
                   name="USD Coin"
                   unit="USDC"
@@ -187,9 +181,9 @@ const Component = ({
               <table className="table-mobile">
                 <RowDataMobile
                   image={iconBitcoin}
-                  percent={bitcoinAlloccation}
-                  balance={balance.balance1.toFixed(8)}
-                  value={balance.usdtValue1.toFixed(2)}
+                  percent={allowcationOfBitcoin.toFixed(2)}
+                  balance={tokenInTable.btcAsset.toFixed(8)}
+                  value={(tokenInTable.btcAsset * tokenInTable.btcPrice).toFixed(2)}
                   className="progress-bar-indicator"
                   name="Bitcoin"
                   unit="BTC"
@@ -197,9 +191,9 @@ const Component = ({
 
                 <RowDataMobile
                   image={iconEthereum}
-                  percent={ethereumAlloccation}
-                  balance={balance.balance1.toFixed(6)}
-                  value={balance.usdtValue0.toFixed(2)}
+                  percent={allowcationOfEth.toFixed(2)}
+                  balance={tokenInTable.ethAsset.toFixed(6)}
+                  value={(tokenInTable.ethAsset * tokenInTable.ethPrice).toFixed(2)}
                   className="progress-bar-indicator-ethereum"
                   name="Ethereum"
                   unit="ETH"
@@ -207,9 +201,9 @@ const Component = ({
 
                 <RowDataMobile
                   image={usdCoin}
-                  percent={usdCoinAlloccation}
-                  balance={balance.balance2.toFixed(6)}
-                  value={balance.balance2.toFixed(2)}
+                  percent={allowcationOfUsd.toFixed(2)}
+                  balance={tokenInTable.usdcAsset.toFixed(6)}
+                  value={tokenInTable.usdcAsset.toFixed(2)}
                   className="progress-bar-indicator-usd-coin"
                   name="USD Coin"
                   unit="USDC"

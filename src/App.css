@@ -43,14 +43,14 @@
   margin-left: 15px;
 }
 
-.container-portfolio {
+.container-detail {
   border: 1px #000 solid;
   margin: 0px 15px 30px;
 }
 
 .text-token {
-  margin-left: 15px;
-  margin-bottom: 15px;
+  margin: 20px 0px 50px 20px;
+  float: left;
 }
 
 @media only screen and (min-width: 415px) {
@@ -110,23 +110,13 @@
     font-size: 25px;
   }
 
-  .group-rbl {
-    display: flex;
-  }
-
-  .unit-symbol {
-    padding-left: 15px;
-    font-size: 50px;
-  }
-
   .text-header {
     font-size: 16px;
     width: 40%;
   }
 
   .flex-container > div {
-    margin: 10px;
-    padding: 20px;
+    margin: 10px;    
     font-size: 30px;
   }
 
@@ -142,6 +132,20 @@
   .header-content-support {
     font-size: 30px;
     font-weight: 700;
+  }
+
+  .button-claim {
+    margin-top: 15px;
+    margin-right: 20px;
+    font-size: 20px;
+    width: 200px;
+    padding-left: 0px;
+    float: right;
+  }
+
+  .claim {
+    padding-left: 40px;
+    padding-right: 40px;
   }
 }
 
@@ -203,9 +207,7 @@ th {
   }
 
   .text-token {
-    border-bottom: 1px #000 solid;
     margin-top: 30px;
-    padding-bottom: 10px;
     margin-right: 15px;
   }
 
@@ -244,15 +246,6 @@ th {
     font-size: 20px;
   }
 
-  .group-rbl {
-    display: flex;
-  }
-
-  .unit-symbol {
-    padding-left: 10px;
-    font-size: 30px;
-  }
-
   .flex-container > div {
     margin: 10px;
     font-size: 30px;
@@ -283,16 +276,34 @@ th {
     font-size: 20px;
     font-weight: 700;
   }
+
+  .button-claim {
+    margin-top: 30px;
+    margin-right: 10px;
+    float: right;
+  }
+
+  .split-custom {
+    border-bottom: 1px #000 solid;
+    margin: 0 15px 20px 15px;
+  }
 }
 
 .text-hear-balance {
   font-size: 16px;
 }
 
+.image-diamond {
+  padding-right: 10px;
+  cursor: pointer;
+}
+
 .button-content {
   margin-top: 15px;
   margin-right: 20px;
   font-size: 25px;
+  padding-left: 45px;
+  padding-right: 45px;
 }
 
 .progress-bar-container {
@@ -327,8 +338,8 @@ th {
 
 .container-header {
   display: flex;
-  padding-left: 15px;
-  margin-top: 15px;
+  padding-left: 10px;
+  margin-top: 50px;
 }
 
 .custom-button {

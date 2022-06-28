@@ -1,7 +1,7 @@
 {
   "name": "rebalancer",
   "version": "0.1.0",
-  "homepage": "https://ictsvn.github.io/comps-rebalancer",
+  "homepage": "https://ictsvn.github.io/diamond-hands",
   "private": true,
   "dependencies": {
     "@metamask/onboarding": "^1.0.1",

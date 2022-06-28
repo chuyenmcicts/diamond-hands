@@ -1,20 +1,29 @@
-import { BigNumber } from "ethers";
-
-export type Balance = {
-  balance0: number;
-  balance1: number;
-  balance2: number;
-  rblBalance: number;
-  rblRawBalance: BigNumber;
-  usdtValue0: number;
-  usdtValue1: number;
-  totalUsdtValue: number;
+export type Token = {
+  tokenId: string;
+  startMonth: number;
+  redeemed: boolean;
+  count: number;
+  ethAsset: number;
+  btcAsset: number;
+  usdcAsset: number;
   ethPrice: number;
-  wbtcPrice: number;
-}
+  btcPrice: number;
+}[];
+
+export type TokenData = {
+  tokenId: string;
+  startMonth: number;
+  redeemed: boolean;
+  count: number;
+  ethAsset: number;
+  btcAsset: number;
+  usdcAsset: number;
+  ethPrice: number;
+  btcPrice: number;
+};
 
 export type ChainInfo = {
   chainId: number;
   name: string;
   valid: boolean;
-}
+};

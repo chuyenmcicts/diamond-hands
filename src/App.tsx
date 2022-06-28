@@ -22,8 +22,8 @@ function App() {
     }
   }, [metaMaskInstalled, setAddress]);
 
-  const loadBalances = useCallback((address: string) => {
-    return getBalances(address)
+  const loadBalances = useCallback(() => {
+    return getBalances()
   }, []);
 
   const onDeposit = useCallback((amount: number) => {

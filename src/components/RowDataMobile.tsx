@@ -2,7 +2,7 @@ interface IProps {
   image: string;
   balance: string;
   value: string;
-  percent: number;
+  percent: string;
   className: string;
   name: string;
   unit: string;

@@ -3,7 +3,7 @@ interface IProps {
   balance: string;
   value: string;
   price: string;
-  percent: number;
+  percent: string;
   className: string;
   name: string;
   unit: string;

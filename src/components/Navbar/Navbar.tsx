@@ -4,7 +4,7 @@ function Navbar() {
   return (
     <>
       <ul >
-        <li className="logo-nav">ReBalancer</li>        
+        <li className="logo-nav">Diamond Hands</li>        
       </ul>
     </>
   );
