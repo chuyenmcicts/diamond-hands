@@ -49,15 +49,29 @@ const Component = ({
 
   const allowcationOfUsd = (tokenInTable.usdcAsset / sumAllToken) * 100;
 
-  const getDayWithCount = () => {
-    const a = new Date();
-    const dayCalculation = a.setMonth(a.getMonth() + 12 - tokenInTable.count);
-    const convertFutureDay = new Date(dayCalculation);
+  const matureMonth = (unixTimestamp: number) => {
+    const a = new Date(unixTimestamp * 1000);
+    const monthCalc = a.setMonth(a.getMonth() + 12 - tokenInTable.count);
+    const convertedMonth = new Date(monthCalc);
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const year = convertFutureDay.getFullYear();
-    const month = months[convertFutureDay.getMonth()];
+    const year = convertedMonth.getFullYear();
+    const month = months[convertedMonth.getMonth()];
     const time = month + ' ' + year;
     return time;
+  }
+
+  const renderButton = () => {
+    return (
+      <>
+        {
+          tokenInTable.count >= 12 ?
+            (
+              <button className="custom-button redeem">Redeem</button>
+            ) :
+            <button disabled={tokenInTable.count !== 12} className="custom-button claim">{matureMonth(tokenInTable.startMonth)}<br></br>to redeem</button>
+        }
+      </>
+    )
   }
 
   const handleDataTable = (token: TokenData) => () => {
@@ -105,7 +119,17 @@ const Component = ({
               <div>
                 <p className="number-asset-value">
                   {tokens.map((token, index) => {
-                    return <img className="image-diamond" onClick={handleDataTable(token)} key={index} src={iconDiamond} alt="" height='50' width='50' />
+                    return (
+                      <img
+                        className="image-diamond"
+                        onClick={handleDataTable(token)}
+                        key={index}
+                        src={iconDiamond}
+                        alt=""
+                        height='50'
+                        width='50'
+                      />
+                    )
                   })}
                 </p>
               </div>
@@ -129,7 +153,7 @@ const Component = ({
           <div className="container-detail">
             <ul>
               <li className="text-token">{tokenInTable.tokenId}</li>
-              <li className="button-claim"><button disabled={tokenInTable.count !== 12} className="custom-button claim">{getDayWithCount()}<br></br>to redeem</button></li>
+              <li className="button-claim">{renderButton()}</li>
             </ul>
             <div className="split-custom"></div>
             <div className="container-table">
