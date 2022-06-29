@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import { BigNumber } from "@ethersproject/bignumber";
 import { Token } from "../types";
 import { abi } from "./configs";
-import { mockResponse } from "../mock/dataTokenMock";
 
 export const initialize = () => {
   const { ethereum } = window as any;
@@ -32,32 +31,66 @@ export const installMetaMask = () => {
   window.alert("Please install MetaMask extension first");
 };
 
-export const getBalances = async (): Promise<Token> => {
-  return new Promise((done) => {
-    setTimeout(() => {
-      done(mockResponse);
-    }, 0);
-  });
+export const getTokens = async (address: string): Promise<Token> => {
+  const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+  const { contractAddress } = loadEnv();
+  const contract = new ethers.Contract(contractAddress, abi, provider);
+  const balance = (await contract.balanceOf(address)) as BigNumber;
+
+  let tokens = [] as Token;
+
+  for (let i = 0; i < Number(balance); i++) {
+    const tokenId = await contract.tokenOfOwnerByIndex(address, i);
+    const tokenValue = await contract.getValue(tokenId);
+
+    const e18 = ethers.utils.parseUnits("1", 18);
+    const e8 = ethers.utils.parseUnits("1", 8);
+    const ethAsset = tokenValue.ethAsset as BigNumber;
+    const btcAsset = tokenValue.btcAsset as BigNumber;
+    const usdcAsset = tokenValue.usdcAsset as BigNumber;
+    const ethPrice = tokenValue.ethPrice as BigNumber;
+    const btcPrice = tokenValue.btcPrice as BigNumber;
+    let btcValue = BigNumber.from(0);
+    let ethValue = BigNumber.from(0);
+
+    btcValue = btcAsset.mul(btcPrice).div(e8);
+    ethValue = ethAsset.mul(ethPrice).div(e18);
+
+    tokens.push({
+      tokenId: tokenId.toNumber(),
+      startMonth: tokenValue.startMonth.toNumber(),
+      redeemed: tokenValue.redeemed,
+      count: tokenValue.count.toNumber(),
+      ethAsset: Number(ethers.utils.formatUnits(ethAsset, 18)),
+      btcAsset: Number(ethers.utils.formatUnits(btcAsset, 8)),
+      usdcAsset: Number(ethers.utils.formatUnits(usdcAsset, 6)),
+      ethPrice: Number(ethers.utils.formatUnits(ethPrice, 6)),
+      btcPrice: Number(ethers.utils.formatUnits(btcPrice, 6)),
+      ethValue: Number(ethers.utils.formatUnits(ethValue, 6)),
+      btcValue: Number(ethers.utils.formatUnits(btcValue, 6)),
+    });
+  }
+
+  return tokens;
 };
 
-export const deposit = async (amount: number) => {
+export const buy = async () => {
+  const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+  const { contractAddress } = loadEnv();
+  const contract = new ethers.Contract(contractAddress, abi, provider);
   const iface = new ethers.utils.Interface(abi);
   const ethereum = (window as any).ethereum;
-  const { contractAddress } = loadEnv();
-
-  const depositFixedAmount = 1000;
-  const data = iface.encodeFunctionData("deposit", [depositFixedAmount]);
-  const value = ethers.utils.parseEther(amount.toString()).toHexString();
+  const data = iface.encodeFunctionData("mint", [contractAddress, true]);
+  const estimatedEth = (await contract.estimateEthForUnitPrice()) as BigNumber;
+  const value = Number(estimatedEth) * 1.01;
 
   const transactionParameters = {
-    to: contractAddress, // Required except during contract publications.
-    from: ethereum.selectedAddress, // must match user's active address.
-    value, // Only required to send ether to the recipient from the initiating external account.
+    to: contractAddress,
+    from: ethereum.selectedAddress,
     data,
+    value,
   };
 
-  // txHash is a hex string
-  // As with any RPC call, it may throw an error
   const txHash = await ethereum.request({
     method: "eth_sendTransaction",
     params: [transactionParameters],
@@ -65,20 +98,18 @@ export const deposit = async (amount: number) => {
   console.log(txHash);
 };
 
-export const withdraw = async (amount: BigNumber) => {
+export const redeem = async (tokenId: number) => {
   const iface = new ethers.utils.Interface(abi);
   const ethereum = (window as any).ethereum;
   const { contractAddress } = loadEnv();
 
-  const data = iface.encodeFunctionData("withdraw", [amount]);
+  const data = iface.encodeFunctionData("redeem", [tokenId]);
   const transactionParameters = {
-    to: contractAddress, // Required except during contract publications.
-    from: ethereum.selectedAddress, // must match user's active address.
+    to: contractAddress,
+    from: ethereum.selectedAddress,
     data,
   };
-
-  // txHash is a hex string
-  // As with any RPC call, it may throw an error
+  
   const txHash = await ethereum.request({
     method: "eth_sendTransaction",
     params: [transactionParameters],

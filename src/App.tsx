@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { connectMetamask, getBalances, initialize, installMetaMask, deposit, withdraw, loadEnv } from './controllers/ui-helpers';
-import { BigNumber } from 'ethers';
+import { connectMetamask, getTokens, initialize, installMetaMask, buy, redeem, loadEnv } from './controllers/ui-helpers';
 import './App.css';
 import Welcome from './components/Welcome';
 import Home from './components/Home';
@@ -22,18 +21,16 @@ function App() {
     }
   }, [metaMaskInstalled, setAddress]);
 
-  const loadBalances = useCallback(() => {
-    return getBalances()
+  const loadTokens = useCallback((address: string) => {
+    return getTokens(address)
   }, []);
 
-  const onDeposit = useCallback((amount: number) => {
-    console.log(`Depositing ${amount}`);
-    deposit(amount);
+  const onBuy = useCallback(() => {    
+    buy();
   }, [])
 
-  const onWithdraw = useCallback((amount: BigNumber) => {
-    console.log(`Withdrawing ${amount}`)
-    withdraw(amount);
+  const onRedeem = useCallback((tokenId: number) => {    
+    redeem(tokenId);
   }, [])
 
   useEffect(() => {
@@ -48,9 +45,9 @@ function App() {
           address={userAddress}
           chainInfo={chainInfo}
           supportedChainId={supportedChainId}
-          loadBalances={loadBalances}
-          deposit={onDeposit}
-          withdraw={onWithdraw}
+          loadTokens={loadTokens}
+          buy={onBuy}
+          redeem={onRedeem}
         />
       ) : (
         <Welcome

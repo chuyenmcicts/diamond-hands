@@ -1,5 +1,5 @@
 export type Token = {
-  tokenId: string;
+  tokenId: number;
   startMonth: number;
   redeemed: boolean;
   count: number;
@@ -8,10 +8,12 @@ export type Token = {
   usdcAsset: number;
   ethPrice: number;
   btcPrice: number;
+  ethValue: number;
+  btcValue: number;
 }[];
 
 export type TokenData = {
-  tokenId: string;
+  tokenId: number;
   startMonth: number;
   redeemed: boolean;
   count: number;
@@ -20,6 +22,8 @@ export type TokenData = {
   usdcAsset: number;
   ethPrice: number;
   btcPrice: number;
+  ethValue: number;
+  btcValue: number;
 };
 
 export type ChainInfo = {

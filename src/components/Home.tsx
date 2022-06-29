@@ -1,4 +1,3 @@
-import { BigNumber } from "ethers";
 import React, { useCallback, useEffect, useState } from "react";
 import { ChainInfo, Token, TokenData } from "../types";
 
@@ -17,18 +16,18 @@ interface IProps {
   address: string;
   chainInfo: ChainInfo;
   supportedChainId: number;
-  loadBalances: () => Promise<Token>;
-  deposit: (amount: number) => void;
-  withdraw: (amount: BigNumber) => void;
+  loadTokens: (address: string) => Promise<Token>;
+  buy: () => void;
+  redeem: (tokenId: number) => void;
 }
 
 const Component = ({
   address,
   chainInfo,
   supportedChainId,
-  loadBalances,
-  deposit,
-  withdraw,
+  loadTokens,
+  buy,
+  redeem,
 }: IProps) => {
   const [loading, setLoading] = useState(true);
 
@@ -39,44 +38,27 @@ const Component = ({
   let sumAllToken = 0;
   if (tokens && tokens.length) {
     tokens.forEach((item) => {
-      sumAllToken += item.ethAsset * item.ethPrice + item.btcAsset * item.btcPrice + item.usdcAsset;
+      sumAllToken += item.ethValue + item.btcValue + item.usdcAsset;
     })
   }
 
-  const allowcationOfBitcoin = ((tokenInTable.btcAsset * tokenInTable.btcPrice) / sumAllToken) * 100;
+  const allowcationOfBitcoin = (tokenInTable.btcValue / sumAllToken) * 100;
 
-  const allowcationOfEth = ((tokenInTable.ethAsset * tokenInTable.ethPrice) / sumAllToken) * 100;
+  const allowcationOfEth = (tokenInTable.ethValue / sumAllToken) * 100;
 
   const allowcationOfUsd = (tokenInTable.usdcAsset / sumAllToken) * 100;
-
-  const matureMonth = (unixTimestamp: number) => {
-    const a = new Date(unixTimestamp * 1000);
-    const monthCalc = a.setMonth(a.getMonth() + 12 - tokenInTable.count);
-    const convertedMonth = new Date(monthCalc);
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const year = convertedMonth.getFullYear();
-    const month = months[convertedMonth.getMonth()];
-    const time = month + ' ' + year;
-    return time;
-  }
-
-  const renderButton = () => {
-    return (
-      <>
-        {
-          tokenInTable.count >= 12 ?
-            (
-              <button className="custom-button redeem">Redeem</button>
-            ) :
-            <button disabled={tokenInTable.count !== 12} className="custom-button claim">{matureMonth(tokenInTable.startMonth)}<br></br>to redeem</button>
-        }
-      </>
-    )
-  }
 
   const handleDataTable = (token: TokenData) => () => {
     setTokenInTable(token)
   };
+
+  const handleBuy = useCallback(() => {
+    buy();
+  }, [buy]);
+
+  const handleRedeem = useCallback(() => {
+    redeem(tokenInTable.tokenId);
+  }, [redeem, tokenInTable.tokenId]);
 
   const onRequestChangeNetwork = useCallback(() => {
     (window as any).ethereum.request({
@@ -91,12 +73,12 @@ const Component = ({
       return;
     }
     setLoading(true);
-    loadBalances().then((data) => {
+    loadTokens(address).then((data) => {
       setToken(data);
       setTokenInTable(data[0])
       setLoading(false);
     });
-  }, [chainInfo, loadBalances]);
+  }, [chainInfo, loadTokens, address]);
 
   return !chainInfo.valid ? (
     <NetworkUnSupport
@@ -138,22 +120,30 @@ const Component = ({
               </div>
               <div>
                 <p className="number-asset-value">
-                  ${sumAllToken.toFixed(2)}
+                  ${sumAllToken.toFixed(6)}
                 </p>
               </div>
             </div>
             <div className="group-container">
               <button
                 type="button"
-                className="button-content custom-button first-button">
+                className="button-content custom-button first-button"
+                onClick={handleBuy}
+              >
                 Buy <img src={iconDiamond} alt="" height='30' width='30' />
               </button>
             </div>
           </div>
           <div className="container-detail">
             <ul>
-              <li className="text-token">{tokenInTable.tokenId}</li>
-              <li className="button-claim">{renderButton()}</li>
+              <li className="text-token">Token ID: {tokenInTable.tokenId}</li>
+              <li className="button-claim">
+                <button
+                  className="custom-button redeem"
+                  // disabled={tokenInTable.count < 12}
+                  onClick={handleRedeem}
+                >Redeem</button>
+              </li>
             </ul>
             <div className="split-custom"></div>
             <div className="container-table">
@@ -171,7 +161,7 @@ const Component = ({
                 <RowData
                   image={iconBitcoin}
                   balance={tokenInTable.btcAsset.toFixed(8)}
-                  value={(tokenInTable.btcAsset * tokenInTable.btcPrice).toFixed(2)}
+                  value={tokenInTable.btcValue.toFixed(6)}
                   price={tokenInTable.btcPrice.toFixed(2)}
                   percent={allowcationOfBitcoin.toFixed(2)}
                   name="Bitcoin"
@@ -182,7 +172,7 @@ const Component = ({
                 <RowData
                   image={iconEthereum}
                   balance={tokenInTable.ethAsset.toFixed(6)}
-                  value={(tokenInTable.ethAsset * tokenInTable.ethPrice).toFixed(2)}
+                  value={tokenInTable.ethValue.toFixed(6)}
                   price={tokenInTable.ethPrice.toFixed(2)}
                   percent={allowcationOfEth.toFixed(2)}
                   className="progress-bar-indicator-ethereum"
@@ -193,7 +183,7 @@ const Component = ({
                 <RowData
                   image={usdCoin}
                   balance={tokenInTable.usdcAsset.toFixed(6)}
-                  value={tokenInTable.usdcAsset.toFixed(2)}
+                  value={tokenInTable.usdcAsset.toFixed(6)}
                   price={"1.00"}
                   percent={allowcationOfUsd.toFixed(2)}
                   className="progress-bar-indicator-usd-coin"
@@ -207,7 +197,7 @@ const Component = ({
                   image={iconBitcoin}
                   percent={allowcationOfBitcoin.toFixed(2)}
                   balance={tokenInTable.btcAsset.toFixed(8)}
-                  value={(tokenInTable.btcAsset * tokenInTable.btcPrice).toFixed(2)}
+                  value={tokenInTable.btcValue.toFixed(6)}
                   className="progress-bar-indicator"
                   name="Bitcoin"
                   unit="BTC"
@@ -217,7 +207,7 @@ const Component = ({
                   image={iconEthereum}
                   percent={allowcationOfEth.toFixed(2)}
                   balance={tokenInTable.ethAsset.toFixed(6)}
-                  value={(tokenInTable.ethAsset * tokenInTable.ethPrice).toFixed(2)}
+                  value={tokenInTable.ethValue.toFixed(6)}
                   className="progress-bar-indicator-ethereum"
                   name="Ethereum"
                   unit="ETH"
@@ -227,7 +217,7 @@ const Component = ({
                   image={usdCoin}
                   percent={allowcationOfUsd.toFixed(2)}
                   balance={tokenInTable.usdcAsset.toFixed(6)}
-                  value={tokenInTable.usdcAsset.toFixed(2)}
+                  value={tokenInTable.usdcAsset.toFixed(6)}
                   className="progress-bar-indicator-usd-coin"
                   name="USD Coin"
                   unit="USDC"
