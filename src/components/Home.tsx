@@ -130,21 +130,21 @@ const Component = ({
                 className="button-content custom-button first-button"
                 onClick={handleBuy}
               >
-                Buy <img src={iconDiamond} alt="" height='30' width='30' />
+                Buy<img className="img-button" src={iconDiamond} alt="" height='30' width='30' />
               </button>
             </div>
           </div>
           <div className="container-detail">
-            <ul>
-              <li className="text-token">Token ID: {tokenInTable.tokenId}</li>
-              <li className="button-claim">
+            <div className="header-container">
+              <div className="text-token">Token ID: {tokenInTable.tokenId}</div>
+              <div className="button-claim">
                 <button
                   className="custom-button redeem"
-                  // disabled={tokenInTable.count < 12}
+                  disabled={tokenInTable.count < 12}
                   onClick={handleRedeem}
                 >Redeem</button>
-              </li>
-            </ul>
+              </div>
+            </div>
             <div className="split-custom"></div>
             <div className="container-table">
               <table className="table-pc">

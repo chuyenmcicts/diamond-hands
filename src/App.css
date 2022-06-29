@@ -43,14 +43,8 @@
   margin-left: 15px;
 }
 
-.container-detail {
-  border: 1px #000 solid;
-  margin: 0px 15px 30px;
-}
-
 .text-token {
   margin: 20px 0px 50px 20px;
-  float: left;
 }
 
 @media only screen and (min-width: 415px) {
@@ -135,12 +129,9 @@
   }
 
   .button-claim {
-    margin-top: 15px;
-    margin-right: 20px;
+    margin-top: 20px;
     font-size: 20px;
     width: 200px;
-    padding-left: 0px;
-    float: right;
   }
 
   .claim {
@@ -152,6 +143,15 @@
     font-size: 25px;
     padding-left: 40px;
     padding-right: 40px;
+  }
+
+  .container-detail {
+    border: 1px #000 solid;
+    margin: 0px 15px 30px;
+  }
+
+  .img-button {
+    margin-left: 10px;
   }
 }
 
@@ -168,6 +168,11 @@ td {
 
 th {
   border-bottom: 1px #000 solid;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
 }
 
 @media only screen and (max-width: 414px) {
@@ -284,9 +289,8 @@ th {
   }
 
   .button-claim {
-    margin-top: 30px;
-    margin-right: 10px;
-    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
   }
 
   .redeem {
@@ -296,6 +300,15 @@ th {
   .split-custom {
     border-bottom: 1px #000 solid;
     margin: 0 15px 20px 15px;
+  }
+
+  .container-detail {
+    border: 1px #000 solid;
+    margin: 50px 15px 30px;
+  }
+
+  .img-button {
+    margin-left: 10px;
   }
 }
 
@@ -310,7 +323,6 @@ th {
 
 .button-content {
   margin-top: 15px;
-  margin-right: 20px;
   font-size: 25px;
   padding-left: 45px;
   padding-right: 45px;
