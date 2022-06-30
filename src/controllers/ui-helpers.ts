@@ -82,7 +82,9 @@ export const buy = async () => {
   const ethereum = (window as any).ethereum;
   const data = iface.encodeFunctionData("mint", [contractAddress, true]);
   const estimatedEth = (await contract.estimateEthForUnitPrice()) as BigNumber;
-  const value = Number(estimatedEth) * 1.01;
+  
+  const valueMulEst = Number(estimatedEth) * 1.01;
+  const value = ethers.utils.parseEther(valueMulEst.toString()).toHexString();
 
   const transactionParameters = {
     to: contractAddress,
@@ -109,7 +111,7 @@ export const redeem = async (tokenId: number) => {
     from: ethereum.selectedAddress,
     data,
   };
-  
+
   const txHash = await ethereum.request({
     method: "eth_sendTransaction",
     params: [transactionParameters],
